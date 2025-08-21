@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Bandi - Portale Interno</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+
+        .nav-tab:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-tab.active {
+            background: #4299e1;
+            color: white;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        .practice-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .practice-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .practice-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .practice-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-nuova {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .status-lavorazione {
+            background: #fef5e7;
+            color: #dd6b20;
+        }
+
+        .status-completata {
+            background: #c6f6d5;
+            color: #2f855a;
+        }
+
+        .practice-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #718096;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .practice-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-filters input,
+        .search-filters select {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #4299e1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .practice-actions {
+                justify-content: flex-start;
+            }
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        .euro-symbol {
+            position: relative;
+        }
+
+        .euro-symbol::before {
+            content: "€";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .euro-symbol input {
+            padding-left: 30px;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+
+        .upload-area:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .upload-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+
+        .upload-subtext {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .uploaded-files {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            font-size: 1.2em;
+        }
+
+        .file-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .file-size {
+            font-size: 0.8em;
+            color: #718096;
+        }
+
+        .file-remove {
+            background: #fed7d7;
+            color: #c53030;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.2s ease;
+        }
+
+        .file-remove:hover {
+            background: #feb2b2;
+        }
+
+        .partner-section {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .partner-header {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .partner-name {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .partner-stats {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .documents-grid {
+            padding: 20px;
+        }
+
+        .document-item {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .document-item:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .document-text {
+            flex: 1;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-edit {
+            background: #fef5e7;
+            color: #dd6b20;
+        }
+
+        .btn-edit:hover {
+            background: #fed7aa;
+        }
+
+        .btn-delete {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .btn-delete:hover {
+            background: #feb2b2;
+        }
+
+        .add-document-form {
+            background: #ebf8ff;
+            border: 2px dashed #4299e1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .add-document-form.editing {
+            background: #fef5e7;
+            border-color: #dd6b20;
+        }
+
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-inline input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-inline button {
+            white-space: nowrap;
+        }
+
+        .empty-documents {
+            text-align: center;
+            color: #718096;
+            font-style: italic;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .documents-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-documents {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .highlight {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Gestione Bandi</h1>
+            <p>Sistema interno per la gestione delle pratiche di credito agevolato</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="showTab('nuova-pratica')">➕ Nuova Pratica</button>
+            <button class="nav-tab" onclick="showTab('documenti-richiesti')">📄 Documenti Richiesti</button>
+            <button class="nav-tab" onclick="showTab('gestione')">📋 Gestione Pratiche</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="content">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">📈 Dashboard Generale</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-practices">0</div>
+                    <div class="stat-label">Pratiche Totali</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="new-practices">0</div>
+                    <div class="stat-label">Nuove (Mese Corrente)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="processing-practices">0</div>
+                    <div class="stat-label">In Lavorazione (Attesa Documenti)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-practices">0</div>
+                    <div class="stat-label">Completate (Inviate al Partner)</div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0; color: #2d3748;">🔔 Pratiche Recenti</h3>
+            <div id="recent-practices"></div>
+        </div>
+
+        <!-- Nuova Pratica Tab -->
+        <div id="nuova-pratica-tab" class="content hidden">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">➕ Inserimento Nuova Pratica</h2>
+            
+            <form id="practice-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="company-name">Ragione Sociale <span class="required">*</span></label>
+                        <input type="text" id="company-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-person">Referente Aziendale <span class="required">*</span></label>
+                        <input type="text" id="contact-person" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-email">Email Referente <span class="required">*</span></label>
+                        <input type="email" id="contact-email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-phone">Telefono Referente</label>
+                        <input type="tel" id="contact-phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company-type">Tipo Azienda <span class="required">*</span></label>
+                        <select id="company-type" required>
+                            <option value="">Seleziona tipo azienda</option>
+                            <option value="startup-costituire">Start-up da costituire</option>
+                            <option value="startup-esistente">Start-up esistente</option>
+                            <option value="azienda-esistente">Azienda esistente</option>
+                            <option value="libero-professionista">Libero professionista</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group euro-symbol">
+                        <label for="economic-need">Esigenza Economica <span class="required">*</span></label>
+                        <input type="number" id="economic-need" required min="0" step="1000" placeholder="Inserisci importo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="handled-by">Gestito da <span class="required">*</span></label>
+                        <select id="handled-by" required>
+                            <option value="">Seleziona gestore</option>
+                            <option value="gianluca">Gianluca</option>
+                            <option value="andrea">Andrea</option>
+                            <option value="simone">Simone</option>
+                            <option value="nicola">Nicola</option>
+                            <option value="gabriele">Gabriele</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="partner">Partner Assegnato <span class="required">*</span></label>
+                        <select id="partner" required>
+                            <option value="">Seleziona partner</option>
+                            <option value="andrea-costa">Andrea Costa</option>
+                            <option value="nicolo">Nicolò</option>
+                            <option value="menti-pratiche">Menti Pratiche</option>
+                            <option value="paltoni-group">Paltoni Group</option>
+                            <option value="friz">Friz</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="grant-type">Tipo di Bando</label>
+                        <select id="grant-type">
+                            <option value="">Seleziona tipo bando</option>
+                            <option value="credito-agevolato">Credito Agevolato</option>
+                            <option value="fondo-perduto">Fondo a Fondo Perduto</option>
+                            <option value="misto">Misto (Credito + Fondo Perduto)</option>
+                            <option value="garanzia">Garanzia</option>
+                            <option value="altro">Altro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deadline">Scadenza Bando</label>
+                        <input type="date" id="deadline">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="business-sector">Settore di Attività</label>
+                        <input type="text" id="business-sector" placeholder="Es. Tecnologia, Commercio, Servizi...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="region">Regione</label>
+                        <select id="region">
+                            <option value="">Seleziona regione</option>
+                            <option value="abruzzo">Abruzzo</option>
+                            <option value="basilicata">Basilicata</option>
+                            <option value="calabria">Calabria</option>
+                            <option value="campania">Campania</option>
+                            <option value="emilia-romagna">Emilia-Romagna</option>
+                            <option value="friuli-venezia-giulia">Friuli-Venezia Giulia</option>
+                            <option value="lazio">Lazio</option>
+                            <option value="liguria">Liguria</option>
+                            <option value="lombardia">Lombardia</option>
+                            <option value="marche">Marche</option>
+                            <option value="molise">Molise</option>
+                            <option value="piemonte">Piemonte</option>
+                            <option value="puglia">Puglia</option>
+                            <option value="sardegna">Sardegna</option>
+                            <option value="sicilia">Sicilia</option>
+                            <option value="toscana">Toscana</option>
+                            <option value="trentino-alto-adige">Trentino-Alto Adige</option>
+                            <option value="umbria">Umbria</option>
+                            <option value="valle-d-aosta">Valle d'Aosta</option>
+                            <option value="veneto">Veneto</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vat-number">Partita IVA</label>
+                        <input type="text" id="vat-number" placeholder="Solo se azienda esistente">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="documents">Documenti Necessari</label>
+                    <textarea id="documents" rows="3" placeholder="Elenca i documenti già in possesso o da richiedere al cliente..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="documents-upload">Carica Documenti 📎</label>
+                    <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                        <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.zip,.rar" style="display: none;">
+                        <div class="upload-content">
+                            <div class="upload-icon">📁</div>
+                            <div class="upload-text">Clicca qui per caricare documenti</div>
+                            <div class="upload-subtext">PDF, DOC, DOCX, JPG, PNG, ZIP, RAR</div>
+                        </div>
+                    </div>
+                    <div id="uploaded-files" class="uploaded-files"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Note Interne</label>
+                    <textarea id="notes" rows="3" placeholder="Annotazioni interne sulla pratica..."></textarea>
+                </div>
+
+                <button type="submit" class="btn">💾 Salva Pratica</button>
+            </form>
+        </div>
+
+        <!-- Documenti Richiesti Tab -->
+        <div id="documenti-richiesti-tab" class="content hidden">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">📄 Documenti Richiesti per Partner</h2>
+            
+            <div class="documents-actions">
+                <input type="text" id="search-documents" class="search-documents" placeholder="🔍 Cerca documenti...">
+                <div class="bulk-actions">
+                    <button class="btn" onclick="exportDocuments()">📤 Esporta Lista</button>
+                    <button class="btn" onclick="importDocuments()">📥 Importa Documenti</button>
+                </div>
+            </div>
+
+            <div id="partners-documents-container"></div>
+        </div>
+
+        <!-- Gestione Pratiche Tab -->
+        <div id="gestione-tab" class="content hidden">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">📋 Gestione Pratiche</h2>
+            
+            <div class="search-filters">
+                <input type="text" id="search-input" placeholder="🔍 Cerca per ragione sociale o referente...">
+                <select id="status-filter">
+                    <option value="">Tutti gli stati</option>
+                    <option value="nuova">Nuova</option>
+                    <option value="attesa-documenti">In Lavorazione (Attesa Documenti)</option>
+                    <option value="inviata-partner">Completata (Inviata al Partner)</option>
+                </select>
+                <select id="partner-filter">
+                    <option value="">Tutti i partner</option>
+                    <option value="andrea-costa">Andrea Costa</option>
+                    <option value="nicolo">Nicolò</option>
+                    <option value="menti-pratiche">Menti Pratiche</option>
+                    <option value="paltoni-group">Paltoni Group</option>
+                    <option value="friz">Friz</option>
+                </select>
+                <button class="btn" onclick="exportData()">📤 Esporta Dati</button>
+            </div>
+
+            <div id="practices-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Dati delle pratiche (memorizzati in memoria durante la sessione)
+        let practices = [];
+        let currentEditId = null;
+        let uploadedFiles = [];
+        let partnersDocuments = {
+            'andrea-costa': [],
+            'nicolo': [],
+            'menti-pratiche': [],
+            'paltoni-group': [],
+            'friz': []
+        };
+        let editingDocument = null;
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+            displayPractices();
+            initFileUpload();
+            initDefaultDocuments();
+            displayPartnersDocuments();
+            
+            // Event listeners per filtri
+            document.getElementById('search-input').addEventListener('input', displayPractices);
+            document.getElementById('status-filter').addEventListener('change', displayPractices);
+            document.getElementById('partner-filter').addEventListener('change', displayPractices);
+            document.getElementById('search-documents').addEventListener('input', searchDocuments);
+        });
+
+        // Gestione tabs
+        function showTab(tabName) {
+            // Nasconde tutti i tab
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Rimuove active da tutti i bottoni
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostra il tab selezionato
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            event.target.classList.add('active');
+            
+            // Aggiorna dashboard se necessario
+            if (tabName === 'dashboard') {
+                updateDashboard();
+            } else if (tabName === 'documenti-richiesti') {
+                displayPartnersDocuments();
+            }
+        }
+
+        // Gestione form
+        document.getElementById('practice-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                id: currentEditId || Date.now(),
+                companyName: document.getElementById('company-name').value,
+                contactPerson: document.getElementById('contact-person').value,
+                contactEmail: document.getElementById('contact-email').value,
+                contactPhone: document.getElementById('contact-phone').value,
+                companyType: document.getElementById('company-type').value,
+                economicNeed: parseInt(document.getElementById('economic-need').value),
+                handledBy: document.getElementById('handled-by').value,
+                partner: document.getElementById('partner').value,
+                grantType: document.getElementById('grant-type').value,
+                deadline: document.getElementById('deadline').value,
+                businessSector: document.getElementById('business-sector').value,
+                region: document.getElementById('region').value,
+                vatNumber: document.getElementById('vat-number').value,
+                documents: document.getElementById('documents').value,
+                notes: document.getElementById('notes').value,
+                uploadedFiles: [...uploadedFiles],
+                status: currentEditId ? practices.find(p => p.id === currentEditId).status : 'nuova',
+                createdAt: currentEditId ? practices.find(p => p.id === currentEditId).createdAt : new Date().toISOString()
+            };
+
+            if (currentEditId) {
+                // Modifica pratica esistente
+                const index = practices.findIndex(p => p.id === currentEditId);
+                practices[index] = formData;
+                currentEditId = null;
+                alert('✅ Pratica aggiornata con successo!');
+            } else {
+                // Nuova pratica
+                practices.push(formData);
+                alert('✅ Nuova pratica salvata con successo!');
+            }
+
+            // Reset form
+            document.getElementById('practice-form').reset();
+            uploadedFiles = [];
+            updateUploadedFilesList();
+            updateDashboard();
+            displayPractices();
+        });
+
+        // Aggiorna dashboard
+        function updateDashboard() {
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            // Filtra le pratiche nuove del mese corrente
+            const newThisMonth = practices.filter(p => {
+                const practiceDate = new Date(p.createdAt);
+                return p.status === 'nuova' && 
+                       practiceDate.getMonth() === currentMonth && 
+                       practiceDate.getFullYear() === currentYear;
+            });
+
+            const stats = {
+                total: practices.length,
+                new: newThisMonth.length,
+                processing: practices.filter(p => p.status === 'attesa-documenti').length,
+                completed: practices.filter(p => p.status === 'inviata-partner').length
+            };
+
+            document.getElementById('total-practices').textContent = stats.total;
+            document.getElementById('new-practices').textContent = stats.new;
+            document.getElementById('processing-practices').textContent = stats.processing;
+            document.getElementById('completed-practices').textContent = stats.completed;
+
+            // Mostra pratiche recenti
+            const recentPractices = practices
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 3);
+
+            const recentContainer = document.getElementById('recent-practices');
+            recentContainer.innerHTML = recentPractices.length > 0 
+                ? recentPractices.map(practice => createPracticeCard(practice, true)).join('')
+                : '<p style="text-align: center; color: #718096; padding: 20px;">Nessuna pratica presente</p>';
+        }
+
+        // Visualizza pratiche con filtri
+        function displayPractices() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const partnerFilter = document.getElementById('partner-filter').value;
+
+            let filteredPractices = practices.filter(practice => {
+                const matchesSearch = practice.companyName.toLowerCase().includes(searchTerm) ||
+                                    practice.contactPerson.toLowerCase().includes(searchTerm);
+                const matchesStatus = !statusFilter || practice.status === statusFilter;
+                const matchesPartner = !partnerFilter || practice.partner === partnerFilter;
+
+                return matchesSearch && matchesStatus && matchesPartner;
+            });
+
+            // Ordina per data di creazione (più recenti prima)
+            filteredPractices.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            const practicesContainer = document.getElementById('practices-list');
+            practicesContainer.innerHTML = filteredPractices.length > 0 
+                ? filteredPractices.map(practice => createPracticeCard(practice, false)).join('')
+                : '<p style="text-align: center; color: #718096; padding: 20px;">Nessuna pratica trovata</p>';
+        }
+
+        // Crea card pratica
+        function createPracticeCard(practice, isRecent = false) {
+            const statusLabels = {
+                'nuova': 'Nuova',
+                'attesa-documenti': 'In Lavorazione (Attesa Documenti)',
+                'inviata-partner': 'Completata (Inviata al Partner)'
+            };
+
+            const partnerLabels = {
+                'andrea-costa': 'Andrea Costa',
+                'nicolo': 'Nicolò',
+                'menti-pratiche': 'Menti Pratiche',
+                'paltoni-group': 'Paltoni Group',
+                'friz': 'Friz'
+            };
+
+            const handledByLabels = {
+                'gianluca': 'Gianluca',
+                'andrea': 'Andrea',
+                'simone': 'Simone',
+                'nicola': 'Nicola',
+                'gabriele': 'Gabriele'
+            };
+
+            const companyTypeLabels = {
+                'startup-costituire': 'Start-up da costituire',
+                'startup-esistente': 'Start-up esistente',
+                'azienda-esistente': 'Azienda esistente',
+                'libero-professionista': 'Libero professionista'
+            };
+
+            const createdDate = new Date(practice.createdAt).toLocaleDateString('it-IT');
+            const formattedAmount = new Intl.NumberFormat('it-IT', { 
+                style: 'currency', 
+                currency: 'EUR' 
+            }).format(practice.economicNeed);
+
+            const statusClass = practice.status === 'nuova' ? 'status-nuova' : 
+                              practice.status === 'attesa-documenti' ? 'status-lavorazione' : 'status-completata';
+
+            return `
+                <div class="practice-card">
+                    <div class="practice-header">
+                        <div class="practice-title">${practice.companyName}</div>
+                        <span class="status-badge ${statusClass}">
+                            ${statusLabels[practice.status]}
+                        </span>
+                    </div>
+
+                    <div class="practice-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Referente</div>
+                            <div class="detail-value">${practice.contactPerson}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">${practice.contactEmail}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Gestito da</div>
+                            <div class="detail-value">${handledByLabels[practice.handledBy] || practice.handledBy}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Tipo Azienda</div>
+                            <div class="detail-value">${companyTypeLabels[practice.companyType] || practice.companyType}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Partner</div>
+                            <div class="detail-value">${partnerLabels[practice.partner] || practice.partner}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Importo Richiesto</div>
+                            <div class="detail-value">${formattedAmount}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Data Creazione</div>
+                            <div class="detail-value">${createdDate}</div>
+                        </div>
+                        ${practice.uploadedFiles && practice.uploadedFiles.length > 0 ? `
+                        <div class="detail-item">
+                            <div class="detail-label">Documenti</div>
+                            <div class="detail-value">${practice.uploadedFiles.length} file caricati</div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    ${!isRecent ? `
+                        <div class="practice-actions">
+                            <select onchange="updateStatus(${practice.id}, this.value)" style="padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <option value="nuova" ${practice.status === 'nuova' ? 'selected' : ''}>Nuova</option>
+                                <option value="attesa-documenti" ${practice.status === 'attesa-documenti' ? 'selected' : ''}>In Lavorazione (Attesa Documenti)</option>
+                                <option value="inviata-partner" ${practice.status === 'inviata-partner' ? 'selected' : ''}>Completata (Inviata al Partner)</option>
+                            </select>
+                            <button class="btn" onclick="editPractice(${practice.id})">✏️ Modifica</button>
+                            <button class="btn btn-danger" onclick="deletePractice(${practice.id})">🗑️ Elimina</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Aggiorna stato pratica
+        function updateStatus(id, newStatus) {
+            const practice = practices.find(p => p.id === id);
+            if (practice) {
+                practice.status = newStatus;
+                updateDashboard();
+                displayPractices();
+            }
+        }
+
+        // Modifica pratica
+        function editPractice(id) {
+            const practice = practices.find(p => p.id === id);
+            if (practice) {
+                currentEditId = id;
+                
+                // Popola il form
+                document.getElementById('company-name').value = practice.companyName;
+                document.getElementById('contact-person').value = practice.contactPerson;
+                document.getElementById('contact-email').value = practice.contactEmail;
+                document.getElementById('contact-phone').value = practice.contactPhone || '';
+                document.getElementById('company-type').value = practice.companyType;
+                document.getElementById('economic-need').value = practice.economicNeed;
+                document.getElementById('handled-by').value = practice.handledBy || '';
+                document.getElementById('partner').value = practice.partner;
+                document.getElementById('grant-type').value = practice.grantType || '';
+                document.getElementById('deadline').value = practice.deadline || '';
+                document.getElementById('business-sector').value = practice.businessSector || '';
+                document.getElementById('region').value = practice.region || '';
+                document.getElementById('vat-number').value = practice.vatNumber || '';
+                document.getElementById('documents').value = practice.documents || '';
+                document.getElementById('notes').value = practice.notes || '';
+                
+                // Carica i file esistenti
+                uploadedFiles = practice.uploadedFiles ? [...practice.uploadedFiles] : [];
+                updateUploadedFilesList();
+                
+                // Passa al tab di modifica
+                showTab('nuova-pratica');
+                
+                // Cambia il pulsante
+                const submitBtn = document.querySelector('#practice-form button[type="submit"]');
+                submitBtn.textContent = '💾 Aggiorna Pratica';
+                submitBtn.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+            }
+        }
+
+        // Inizializza upload file
+        function initFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const uploadArea = document.querySelector('.upload-area');
+
+            fileInput.addEventListener('change', handleFileSelection);
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+        }
+
+        // Gestisce selezione file
+        function handleFileSelection(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        // Gestisce i file
+        function handleFiles(files) {
+            for (let file of files) {
+                if (validateFile(file)) {
+                    uploadedFiles.push({
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        uploadDate: new Date().toISOString()
+                    });
+                }
+            }
+            updateUploadedFilesList();
+        }
+
+        // Valida file
+        function validateFile(file) {
+            const allowedTypes = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'application/zip',
+                'application/x-rar-compressed'
+            ];
+
+            const maxSize = 10 * 1024 * 1024; // 10MB
+
+            if (!allowedTypes.includes(file.type)) {
+                alert(`⚠️ Tipo di file non supportato: ${file.name}`);
+                return false;
+            }
+
+            if (file.size > maxSize) {
+                alert(`⚠️ File troppo grande: ${file.name}. Massimo 10MB.`);
+                return false;
+            }
+
+            return true;
+        }
+
+        // Aggiorna lista file caricati
+        function updateUploadedFilesList() {
+            const container = document.getElementById('uploaded-files');
+            
+            if (uploadedFiles.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = uploadedFiles.map(file => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">${getFileIcon(file.type)}</span>
+                        <div class="file-details">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button class="file-remove" onclick="removeFile('${file.id}')">Rimuovi</button>
+                </div>
+            `).join('');
+        }
+
+        // Rimuovi file
+        function removeFile(fileId) {
+            uploadedFiles = uploadedFiles.filter(file => file.id !== fileId);
+            updateUploadedFilesList();
+        }
+
+        // Ottieni icona file
+        function getFileIcon(fileType) {
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('word') || fileType.includes('document')) return '📝';
+            if (fileType.includes('image')) return '🖼️';
+            if (fileType.includes('zip') || fileType.includes('rar')) return '📦';
+            return '📎';
+        }
+
+        // Formatta dimensione file
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Elimina pratica
+        function deletePractice(id) {
+            if (confirm('⚠️ Sei sicuro di voler eliminare questa pratica? L\'operazione non può essere annullata.')) {
+                practices = practices.filter(p => p.id !== id);
+                updateDashboard();
+                displayPractices();
+                alert('🗑️ Pratica eliminata con successo!');
+            }
+        }
+
+        // Esporta dati
+        function exportData() {
+            if (practices.length === 0) {
+                alert('⚠️ Nessuna pratica da esportare!');
+                return;
+            }
+
+            const csvContent = convertToCSV(practices);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `pratiche_bandi_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Converti in CSV
+        function convertToCSV(data) {
+            const headers = [
+                'Ragione Sociale', 'Referente', 'Email', 'Telefono', 'Tipo Azienda',
+                'Importo', 'Gestito da', 'Partner', 'Tipo Bando', 'Scadenza', 'Settore',
+                'Regione', 'P.IVA', 'Stato', 'Data Creazione', 'Documenti Caricati', 'Note'
+            ];
+
+            const csvRows = [headers.join(',')];
+
+            data.forEach(practice => {
+                const row = [
+                    `"${practice.companyName}"`,
+                    `"${practice.contactPerson}"`,
+                    `"${practice.contactEmail}"`,
+                    `"${practice.contactPhone || ''}"`,
+                    `"${practice.companyType}"`,
+                    practice.economicNeed,
+                    `"${practice.handledBy || ''}"`,
+                    `"${practice.partner}"`,
+                    `"${practice.grantType || ''}"`,
+                    `"${practice.deadline || ''}"`,
+                    `"${practice.businessSector || ''}"`,
+                    `"${practice.region || ''}"`,
+                    `"${practice.vatNumber || ''}"`,
+                    `"${practice.status}"`,
+                    `"${new Date(practice.createdAt).toLocaleDateString('it-IT')}"`,
+                    `"${practice.uploadedFiles ? practice.uploadedFiles.length : 0} file"`,
+                    `"${practice.notes || ''}"`
+                ];
+                csvRows.push(row.join(','));
+            });
+
+            return csvRows.join('\n');
+        }
+
+        // Reset form quando si passa al tab nuova pratica
+        document.querySelector('button[onclick="showTab(\'nuova-pratica\')"]').addEventListener('click', function() {
+            if (!currentEditId) {
+                document.getElementById('practice-form').reset();
+                uploadedFiles = [];
+                updateUploadedFilesList();
+                const submitBtn = document.querySelector('#practice-form button[type="submit"]');
+                submitBtn.textContent = '💾 Salva Pratica';
+                submitBtn.style.background = 'linear-gradient(135deg, #4299e1, #3182ce)';
+            }
+        });
+
+        // === GESTIONE DOCUMENTI PER PARTNER ===
+
+        // Inizializza documenti di default
+        function initDefaultDocuments() {
+            if (Object.values(partnersDocuments).every(docs => docs.length === 0)) {
+                partnersDocuments = {
+                    'andrea-costa': [
+                        { id: 'ac1', text: 'Visura Camerale (non oltre 30 giorni)' },
+                        { id: 'ac2', text: 'Documento di identità del legale rappresentante' },
+                        { id: 'ac3', text: 'Codice fiscale dell\'azienda' },
+                        { id: 'ac4', text: 'Ultimo bilancio approvato' }
+                    ],
+                    'nicolo': [
+                        { id: 'n1', text: 'Partita IVA' },
+                        { id: 'n2', text: 'Certificato di regolarità contributiva (DURC)' },
+                        { id: 'n3', text: 'Business Plan dettagliato' }
+                    ],
+                    'menti-pratiche': [
+                        { id: 'mp1', text: 'Stato patrimoniale ultimo esercizio' },
+                        { id: 'mp2', text: 'Conto economico ultimo esercizio' },
+                        { id: 'mp3', text: 'Delibera del CdA per la richiesta finanziamento' }
+                    ],
+                    'paltoni-group': [
+                        { id: 'pg1', text: 'Autocertificazione antimafia' },
+                        { id: 'pg2', text: 'Fatturato ultimi 3 anni' },
+                        { id: 'pg3', text: 'Piano di investimenti' }
+                    ],
+                    'friz': [
+                        { id: 'f1', text: 'Modello UNICO ultima dichiarazione' },
+                        { id: 'f2', text: 'Estratto conto bancario (ultimi 3 mesi)' },
+                        { id: 'f3', text: 'Permessi/Autorizzazioni specifiche del settore' }
+                    ]
+                };
+            }
+        }
+
+        // Mostra documenti per tutti i partner
+        function displayPartnersDocuments() {
+            const container = document.getElementById('partners-documents-container');
+            const partnerLabels = {
+                'andrea-costa': 'Andrea Costa',
+                'nicolo': 'Nicolò',
+                'menti-pratiche': 'Menti Pratiche',
+                'paltoni-group': 'Paltoni Group',
+                'friz': 'Friz'
+            };
+
+            const searchTerm = document.getElementById('search-documents').value.toLowerCase();
+
+            container.innerHTML = Object.keys(partnersDocuments).map(partnerId => {
+                const partnerName = partnerLabels[partnerId];
+                const documents = partnersDocuments[partnerId];
+                
+                // Filtra documenti se c'è una ricerca
+                const filteredDocuments = searchTerm 
+                    ? documents.filter(doc => doc.text.toLowerCase().includes(searchTerm))
+                    : documents;
+
+                return `
+                    <div class="partner-section">
+                        <div class="partner-header">
+                            <div class="partner-name">${partnerName}</div>
+                            <div class="partner-stats">${documents.length} documenti</div>
+                        </div>
+                        <div class="documents-grid">
+                            ${filteredDocuments.length > 0 ? 
+                                filteredDocuments.map(doc => createDocumentItem(partnerId, doc, searchTerm)).join('') :
+                                (searchTerm ? 
+                                    '<div class="empty-documents">Nessun documento trovato per questa ricerca</div>' :
+                                    '<div class="empty-documents">Nessun documento configurato per questo partner</div>'
+                                )
+                            }
+                            <div class="add-document-form ${editingDocument && editingDocument.partnerId === partnerId ? 'editing' : ''}" 
+                                 id="add-form-${partnerId}">
+                                <div class="form-inline">
+                                    <input type="text" 
+                                           id="new-doc-${partnerId}" 
+                                           placeholder="${editingDocument && editingDocument.partnerId === partnerId ? 'Modifica documento...' : 'Aggiungi nuovo documento...'}"
+                                           value="${editingDocument && editingDocument.partnerId === partnerId ? editingDocument.text : ''}"
+                                           onkeypress="handleDocumentKeypress(event, '${partnerId}')">
+                                    <button class="btn btn-small" onclick="${editingDocument && editingDocument.partnerId === partnerId ? 'saveEditDocument' : 'addDocument'}('${partnerId}')">
+                                        ${editingDocument && editingDocument.partnerId === partnerId ? '💾 Salva' : '➕ Aggiungi'}
+                                    </button>
+                                    ${editingDocument && editingDocument.partnerId === partnerId ? `
+                                        <button class="btn btn-small btn-delete" onclick="cancelEditDocument()">✖️ Annulla</button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Crea elemento documento
+        function createDocumentItem(partnerId, document, searchTerm = '') {
+            let highlightedText = document.text;
+            if (searchTerm) {
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                highlightedText = document.text.replace(regex, '<mark>$1</mark>');
+            }
+
+            return `
+                <div class="document-item ${searchTerm && document.text.toLowerCase().includes(searchTerm) ? 'highlight' : ''}">
+                    <div class="document-text">${highlightedText}</div>
+                    <div class="document-actions">
+                        <button class="btn-small btn-edit" onclick="editDocument('${partnerId}', '${document.id}')">✏️ Modifica</button>
+                        <button class="btn-small btn-delete" onclick="deleteDocument('${partnerId}', '${document.id}')">🗑️ Elimina</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Aggiungi documento
+        function addDocument(partnerId) {
+            const input = document.getElementById(`new-doc-${partnerId}`);
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('⚠️ Inserisci il testo del documento');
+                return;
+            }
+
+            const newDocument = {
+                id: Date.now().toString(),
+                text: text
+            };
+
+            partnersDocuments[partnerId].push(newDocument);
+            input.value = '';
+            displayPartnersDocuments();
+            
+            // Scroll verso il nuovo documento
+            setTimeout(() => {
+                const newElement = document.querySelector(`[onclick*="${newDocument.id}"]`).closest('.document-item');
+                newElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                newElement.style.background = '#c6f6d5';
+                setTimeout(() => newElement.style.background = '', 2000);
+            }, 100);
+        }
+
+        // Modifica documento
+        function editDocument(partnerId, documentId) {
+            const document = partnersDocuments[partnerId].find(doc => doc.id === documentId);
+            if (document) {
+                editingDocument = { partnerId, documentId, text: document.text };
+                displayPartnersDocuments();
+                
+                // Focus sull'input
+                setTimeout(() => {
+                    const input = document.getElementById(`new-doc-${partnerId}`);
+                    input.focus();
+                    input.select();
+                }, 100);
+            }
+        }
+
+        // Salva modifica documento
+        function saveEditDocument(partnerId) {
+            const input = document.getElementById(`new-doc-${partnerId}`);
+            const newText = input.value.trim();
+            
+            if (!newText) {
+                alert('⚠️ Il testo del documento non può essere vuoto');
+                return;
+            }
+
+            const documentIndex = partnersDocuments[partnerId].findIndex(doc => doc.id === editingDocument.documentId);
+            if (documentIndex !== -1) {
+                partnersDocuments[partnerId][documentIndex].text = newText;
+                editingDocument = null;
+                displayPartnersDocuments();
+                alert('✅ Documento aggiornato con successo!');
+            }
+        }
+
+        // Annulla modifica
+        function cancelEditDocument() {
+            editingDocument = null;
+            displayPartnersDocuments();
+        }
+
+        // Elimina documento
+        function deleteDocument(partnerId, documentId) {
+            const document = partnersDocuments[partnerId].find(doc => doc.id === documentId);
+            if (document && confirm(`⚠️ Sei sicuro di voler eliminare questo documento?\n\n"${document.text}"`)) {
+                partnersDocuments[partnerId] = partnersDocuments[partnerId].filter(doc => doc.id !== documentId);
+                displayPartnersDocuments();
+                alert('🗑️ Documento eliminato con successo!');
+            }
+        }
+
+        // Gestisce invio con Enter
+        function handleDocumentKeypress(event, partnerId) {
+            if (event.key === 'Enter') {
+                if (editingDocument && editingDocument.partnerId === partnerId) {
+                    saveEditDocument(partnerId);
+                } else {
+                    addDocument(partnerId);
+                }
+            } else if (event.key === 'Escape' && editingDocument) {
+                cancelEditDocument();
+            }
+        }
+
+        // Cerca documenti
+        function searchDocuments() {
+            displayPartnersDocuments();
+        }
+
+        // Esporta documenti
+        function exportDocuments() {
+            const partnerLabels = {
+                'andrea-costa': 'Andrea Costa',
+                'nicolo': 'Nicolò',
+                'menti-pratiche': 'Menti Pratiche',
+                'paltoni-group': 'Paltoni Group',
+                'friz': 'Friz'
+            };
+
+            let csvContent = 'Partner,Documento\n';
+            
+            Object.keys(partnersDocuments).forEach(partnerId => {
+                const partnerName = partnerLabels[partnerId];
+                partnersDocuments[partnerId].forEach(doc => {
+                    csvContent += `"${partnerName}","${doc.text}"\n`;
+                });
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `documenti_partner_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Importa documenti (funzionalità futura)
+        function importDocuments() {
+            alert('🚧 Funzionalità di importazione in sviluppo!\n\nPer ora puoi aggiungere i documenti manualmente per ogni partner.');
+        }
+    </script>
+</body>
+</html>
